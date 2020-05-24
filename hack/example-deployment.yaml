@@ -30,7 +30,7 @@ spec:
         - name: BACKEND_PORT
           value: "2368" # default ghost port
         - name: WALLET_POINTER
-          value: "$ilp.uphold.com/bzyEMBgwKY7w"
+          value: "$wallet.example.com/your-wallet-here"
       # Example backend app
       - image: ghost # https://hub.docker.com/_/ghost
         name: ghost-blog
