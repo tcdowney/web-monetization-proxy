@@ -21,10 +21,10 @@ func TestAddWebMonetizationMeta(t *testing.T) {
 
 		it.Before(func() {
 			proxyHandler = handlers.ProxyHandler{
-				BackendPort:   1337,
-				WalletPointer: "$wallet.example.com/🤑",
+				BackendPort:    1337,
+				PaymentPointer: "$wallet.example.com/🤑",
 			}
-			addWebMonetizationMetaFunc = handlers.BuildMonetizationResponseModifier(proxyHandler.WalletPointer)
+			addWebMonetizationMetaFunc = handlers.BuildMonetizationResponseModifier(proxyHandler.PaymentPointer)
 		})
 
 		when("the response is not HTML", func() {

@@ -9,7 +9,7 @@ This proof-of-concept project was created for fun as part of the [DEV "Grant For
 The proxy relies on the following environment variables:
 * `PROXY_PORT` -- the port the proxy listens on
 * `BACKEND_PORT` -- the port of the backend application that requests are forwarded to
-* `WALLET_POINTER` -- an [Interledger Payment Pointer](https://paymentpointers.org/) string
+* `PAYMENT_POINTER` -- an [Interledger Payment Pointer](https://paymentpointers.org/) string
 
 Reference the [example Deployment](hack/example-deployment.yaml) to see how you might configure these in Kubernetes.
 

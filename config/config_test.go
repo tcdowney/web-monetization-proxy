@@ -22,7 +22,7 @@ func TestConfig(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			err = os.Setenv("WALLET_POINTER", "$wallet.example.com/🤑")
+			err = os.Setenv("PAYMENT_POINTER", "$wallet.example.com/🤑")
 			if err != nil {
 				t.Error(err)
 			}
@@ -44,8 +44,8 @@ func TestConfig(t *testing.T) {
 				t.Errorf("Expected BackendPort '%d' to match 9000", cfg.BackendPort)
 			}
 
-			if cfg.WalletPointer != "$wallet.example.com/🤑" {
-				t.Errorf("Expected WalletPointer '%s' to match '$wallet.example.com/🤑'", cfg.WalletPointer)
+			if cfg.PaymentPointer != "$wallet.example.com/🤑" {
+				t.Errorf("Expected PaymentPointer '%s' to match '$wallet.example.com/🤑'", cfg.PaymentPointer)
 			}
 		})
 
@@ -143,9 +143,9 @@ func TestConfig(t *testing.T) {
 			})
 		})
 
-		when("WALLET_POINTER is not provided", func() {
+		when("PAYMENT_POINTER is not provided", func() {
 			it("returns an error", func() {
-				err := os.Unsetenv("WALLET_POINTER")
+				err := os.Unsetenv("PAYMENT_POINTER")
 				if err != nil {
 					t.Error(err)
 				}
@@ -155,8 +155,8 @@ func TestConfig(t *testing.T) {
 					t.Error("Expect error to have occurred")
 				}
 
-				if !strings.Contains(err.Error(), "WALLET_POINTER is required") {
-					t.Errorf("Expected error '%s' to say WALLET_POINTER is required", err)
+				if !strings.Contains(err.Error(), "PAYMENT_POINTER is required") {
+					t.Errorf("Expected error '%s' to say PAYMENT_POINTER is required", err)
 				}
 			})
 		})

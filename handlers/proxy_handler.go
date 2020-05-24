@@ -14,15 +14,15 @@ import (
 )
 
 type ProxyHandler struct {
-	BackendPort   int
-	WalletPointer string
+	BackendPort    int
+	PaymentPointer string
 }
 
 func (h *ProxyHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	url, _ := url.Parse(fmt.Sprintf("http://0.0.0.0:%d", h.BackendPort))
 
 	proxy := httputil.NewSingleHostReverseProxy(url)
-	proxy.ModifyResponse = BuildMonetizationResponseModifier(h.WalletPointer)
+	proxy.ModifyResponse = BuildMonetizationResponseModifier(h.PaymentPointer)
 
 	req.URL.Host = url.Host
 	req.URL.Scheme = url.Scheme
@@ -37,7 +37,7 @@ func (h *ProxyHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	proxy.ServeHTTP(resp, req)
 }
 
-func BuildMonetizationResponseModifier(walletPointer string) func(*http.Response) error {
+func BuildMonetizationResponseModifier(paymentPointer string) func(*http.Response) error {
 	return func(r *http.Response) error {
 		if !contentTypeIsHTML(r) {
 			log.Println("Content-Type is not HTML")
@@ -51,7 +51,7 @@ func BuildMonetizationResponseModifier(walletPointer string) func(*http.Response
 		}
 		defer r.Body.Close()
 
-		insertMonetizationMeta(doc, walletPointer)
+		insertMonetizationMeta(doc, paymentPointer)
 		buf := bytes.NewBuffer([]byte{})
 		html.Render(buf, doc)
 
@@ -61,14 +61,14 @@ func BuildMonetizationResponseModifier(walletPointer string) func(*http.Response
 	}
 }
 
-func insertMonetizationMeta(n *html.Node, walletPointer string) {
+func insertMonetizationMeta(n *html.Node, paymentPointer string) {
 	if n.Type == html.ElementNode && n.Data == "head" {
 		n.AppendChild(&html.Node{
 			Type: html.ElementNode,
 			Data: "meta",
 			Attr: []html.Attribute{
 				{Key: "name", Val: "monetization"},
-				{Key: "content", Val: walletPointer},
+				{Key: "content", Val: paymentPointer},
 			},
 		})
 
@@ -76,7 +76,7 @@ func insertMonetizationMeta(n *html.Node, walletPointer string) {
 	}
 
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		insertMonetizationMeta(c, walletPointer)
+		insertMonetizationMeta(c, paymentPointer)
 	}
 }
 

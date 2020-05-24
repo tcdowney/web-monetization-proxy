@@ -16,8 +16,8 @@ func main() {
 	}
 
 	proxyHandler := &handlers.ProxyHandler{
-		BackendPort:   cfg.BackendPort,
-		WalletPointer: cfg.WalletPointer,
+		BackendPort:    cfg.BackendPort,
+		PaymentPointer: cfg.PaymentPointer,
 	}
 
 	mux := http.NewServeMux()

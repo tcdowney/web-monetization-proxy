@@ -7,9 +7,9 @@ import (
 )
 
 type Config struct {
-	ProxyPort     int
-	BackendPort   int
-	WalletPointer string
+	ProxyPort      int
+	BackendPort    int
+	PaymentPointer string
 }
 
 func Load() (*Config, error) {
@@ -37,15 +37,15 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("PROXY_PORT cannot equal BACKEND_PORT")
 	}
 
-	walletPointer := os.Getenv("WALLET_POINTER")
-	if walletPointer == "" {
-		return nil, fmt.Errorf("WALLET_POINTER is required")
+	paymentPointer := os.Getenv("PAYMENT_POINTER")
+	if paymentPointer == "" {
+		return nil, fmt.Errorf("PAYMENT_POINTER is required")
 	}
 
 	c := &Config{
-		ProxyPort:     proxyPort,
-		BackendPort:   backendPort,
-		WalletPointer: walletPointer,
+		ProxyPort:      proxyPort,
+		BackendPort:    backendPort,
+		PaymentPointer: paymentPointer,
 	}
 
 	return c, nil
