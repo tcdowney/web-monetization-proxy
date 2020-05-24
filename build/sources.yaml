@@ -1,0 +1,9 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: downey/web-monetization-proxy
+  path: .
+  pack:
+    build:
+      builder: cloudfoundry/cnb:bionic

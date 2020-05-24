@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: monetization-proxy-example
+  name: monetization-proxy-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monetization-proxy-example
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: monetization-proxy-example
+    spec:
+      containers:
+      # Sidecar proxy configuration
+      - image: downey/web-monetization-proxy
+        name: web-monetization-proxy
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PROXY_PORT
+          value: "8080" # port our sidecar listens on
+        - name: BACKEND_PORT
+          value: "2368" # default ghost port
+        - name: WALLET_POINTER
+          value: "$ilp.uphold.com/bzyEMBgwKY7w"
+      # Example backend app
+      - image: ghost # https://hub.docker.com/_/ghost
+        name: ghost-blog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: monetization-proxy-example
+  name: monetization-proxy-example
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: monetization-proxy-example
+  type: ClusterIP
+
