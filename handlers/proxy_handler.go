@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"time"
+	"strings"
 
 	"golang.org/x/net/html"
 )
@@ -17,16 +16,6 @@ import (
 type ProxyHandler struct {
 	BackendPort   int
 	WalletPointer string
-}
-
-var httpClient = &http.Client{
-	Transport: &http.Transport{
-		DisableKeepAlives: true,
-		Dial: (&net.Dialer{
-			Timeout:   10 * time.Second,
-			KeepAlive: 0,
-		}).Dial,
-	},
 }
 
 func (h *ProxyHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
@@ -50,12 +39,17 @@ func (h *ProxyHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 func BuildMonetizationResponseModifier(walletPointer string) func(*http.Response) error {
 	return func(r *http.Response) error {
-		defer r.Body.Close()
+		if !contentTypeIsHTML(r) {
+			log.Println("Content-Type is not HTML")
+			return nil
+		}
+
 		doc, err := html.Parse(r.Body)
 		if err != nil {
 			log.Println(err)
 			return nil
 		}
+		defer r.Body.Close()
 
 		insertMonetizationMeta(doc, walletPointer)
 		buf := bytes.NewBuffer([]byte{})
@@ -84,4 +78,8 @@ func insertMonetizationMeta(n *html.Node, walletPointer string) {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		insertMonetizationMeta(c, walletPointer)
 	}
+}
+
+func contentTypeIsHTML(r *http.Response) bool {
+	return strings.Contains(r.Header.Get("Content-Type"), "text/html")
 }

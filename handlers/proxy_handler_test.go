@@ -27,6 +27,36 @@ func TestAddWebMonetizationMeta(t *testing.T) {
 			addWebMonetizationMetaFunc = handlers.BuildMonetizationResponseModifier(proxyHandler.WalletPointer)
 		})
 
+		when("the response is not HTML", func() {
+			it.Before(func() {
+				response = &http.Response{
+					StatusCode: 200,
+					ProtoMajor: 1,
+					ProtoMinor: 1,
+					Header:     make(http.Header),
+					Body:       ioutil.NopCloser(bytes.NewBufferString("console.log('hello world')")),
+				}
+
+				response.Header.Set("Content-Type", mime.TypeByExtension(".js"))
+			})
+
+			it("does not modify the response", func() {
+				if err := addWebMonetizationMetaFunc(response); err != nil {
+					t.Error(err)
+				}
+
+				bodyBytes, err := ioutil.ReadAll(response.Body)
+				if err != nil {
+					t.Error(err)
+				}
+
+				bodyString := string(bodyBytes)
+				if strings.Contains(bodyString, "<meta name=\"monetization\" content=\"$wallet.example.com/🤑\"/>") {
+					t.Error(fmt.Sprintf("<meta> tag was added: %s", bodyString))
+				}
+			})
+		})
+
 		when("the response is HTML", func() {
 			when("the response HTML has a <head> tag", func() {
 				it.Before(func() {
