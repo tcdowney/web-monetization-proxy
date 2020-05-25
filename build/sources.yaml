@@ -6,4 +6,4 @@ sources:
   path: .
   pack:
     build:
-      builder: cloudfoundry/cnb:bionic
+      builder: cloudfoundry/cnb:tiny
