@@ -1,9 +1,14 @@
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/downey/web-monetization-proxy)](https://hub.docker.com/repository/docker/downey/web-monetization-proxy) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/downey/web-monetization-proxy)](https://hub.docker.com/repository/docker/downey/web-monetization-proxy)
+
 # web-monetization-proxy
+Docker repo: https://hub.docker.com/repository/docker/downey/web-monetization-proxy
+
 Simple proxy for injecting [Web Monetization](https://webmonetization.org/) `meta` tags. Intended to be deployed as a sidecar process alongside Web Monetization unaware webapps.
 
-This proof-of-concept project was created for fun as part of the [DEV "Grant For The Web" Hackathon](https://dev.to/devteam/announcing-the-grant-for-the-web-hackathon-on-dev-3kd1).
-
 ![Architecture diagram of the Web Monetization Proxy](doc/web-monetization-proxy.png)
+
+## disclaimer
+This **proof-of-concept** project was created for fun as part of the [DEV "Grant For The Web" Hackathon](https://dev.to/devteam/announcing-the-grant-for-the-web-hackathon-on-dev-3kd1). It should **not be relied on** for production use cases and merely exists to demonstrate what is possible. In the future it might be worth exploring doing something similar using Envoy proxies and a [WASM](https://github.com/envoyproxy/envoy-wasm) plugin that implements this functionality.
 
 ## configuration
 The proxy relies on the following environment variables:
