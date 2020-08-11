@@ -15,10 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	proxyHandler := &handlers.ProxyHandler{
-		BackendPort:    cfg.BackendPort,
-		PaymentPointer: cfg.PaymentPointer,
-	}
+	proxyHandler := handlers.NewProxyHandler(cfg.BackendPort, cfg.PaymentPointer, cfg.ReceiptSubmissionUrl)
 
 	mux := http.NewServeMux()
 	mux.Handle("/", proxyHandler)
