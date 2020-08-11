@@ -15,6 +15,7 @@ The proxy relies on the following environment variables:
 * `PROXY_PORT` -- the port the proxy listens on
 * `BACKEND_PORT` -- the port of the backend application that requests are forwarded to
 * `PAYMENT_POINTER` -- an [Interledger Payment Pointer](https://paymentpointers.org/) string
+* `RECEIPT_SUBMISSION_URL` -- (optional) URL at which to POST [STREAM receipts](https://interledger.org/rfcs/0039-stream-receipts/) for received payment
 
 Reference the [example Deployment](hack/example-deployment.yaml) to see how you might configure these in Kubernetes.
 

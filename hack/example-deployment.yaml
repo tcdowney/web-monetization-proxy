@@ -31,6 +31,8 @@ spec:
           value: "2368" # default ghost port
         - name: PAYMENT_POINTER
           value: "$wallet.example.com/your-wallet-here"
+        - name: RECEIPT_SUBMISSION_URL
+          value: "https://receipt-verifier.com/balances/id:creditReceipt"
       # Example backend app
       - image: ghost # https://hub.docker.com/_/ghost
         name: ghost-blog

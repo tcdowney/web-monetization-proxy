@@ -26,6 +26,10 @@ func TestConfig(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
+			err = os.Setenv("RECEIPT_SUBMISSION_URL", "https://verifier.com/balances/123:creditReceipt")
+			if err != nil {
+				t.Error(err)
+			}
 
 		})
 
@@ -46,6 +50,10 @@ func TestConfig(t *testing.T) {
 
 			if cfg.PaymentPointer != "$wallet.example.com/🤑" {
 				t.Errorf("Expected PaymentPointer '%s' to match '$wallet.example.com/🤑'", cfg.PaymentPointer)
+			}
+
+			if cfg.ReceiptSubmissionUrl != "https://verifier.com/balances/123:creditReceipt" {
+				t.Errorf("Expected ReceiptSubmissionUrl '%s' to match 'https://verifier.com/balances/123:creditReceipt'", cfg.ReceiptSubmissionUrl)
 			}
 		})
 
@@ -157,6 +165,24 @@ func TestConfig(t *testing.T) {
 
 				if !strings.Contains(err.Error(), "PAYMENT_POINTER is required") {
 					t.Errorf("Expected error '%s' to say PAYMENT_POINTER is required", err)
+				}
+			})
+		})
+
+		when("RECEIPT_SUBMISSION_URL is not provided", func() {
+			it("uses empty string", func() {
+				err := os.Unsetenv("RECEIPT_SUBMISSION_URL")
+				if err != nil {
+					t.Error(err)
+				}
+
+				cfg, err = config.Load()
+				if err != nil {
+					t.Error(err)
+				}
+
+				if cfg.ReceiptSubmissionUrl != "" {
+					t.Errorf("Expected ReceiptSubmissionUrl '%s' to match \"\"", cfg.ReceiptSubmissionUrl)
 				}
 			})
 		})

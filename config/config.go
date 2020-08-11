@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	ProxyPort      int
-	BackendPort    int
-	PaymentPointer string
+	ProxyPort            int
+	BackendPort          int
+	PaymentPointer       string
+	ReceiptSubmissionUrl string
 }
 
 func Load() (*Config, error) {
@@ -42,10 +43,13 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("PAYMENT_POINTER is required")
 	}
 
+	receiptSubmissionUrl := os.Getenv("RECEIPT_SUBMISSION_URL")
+
 	c := &Config{
-		ProxyPort:      proxyPort,
-		BackendPort:    backendPort,
-		PaymentPointer: paymentPointer,
+		ProxyPort:            proxyPort,
+		BackendPort:          backendPort,
+		PaymentPointer:       paymentPointer,
+		ReceiptSubmissionUrl: receiptSubmissionUrl,
 	}
 
 	return c, nil
